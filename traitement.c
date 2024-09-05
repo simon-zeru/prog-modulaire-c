@@ -3,8 +3,10 @@
 #include <stdio.h>
 #include <string.h>
 #include "traitement.h"
+#include <time.h>
 #define SEUIL1_PIXEL(valeur, seuil) (valeur < seuil ? 0 : 255)
 #define SEUIL2_PIXEL(valeur, seuil) (valeur = (valeur < seuil) ? 0 : 255)
+
 
 void pgm_show(char *filename) {
     AFFICHER_FONCTION();
@@ -89,20 +91,25 @@ void pgm_gradient(pgm_t_image *image, pgm_t_pixel from, pgm_t_pixel to) {
 
 
 int main(void) {
-    pgm_t_image *p1 = pgm_read("guadalest.pgm");
+    float timeBefore = clock();
+    for(int i = 0; i < 10; i++) {
+        pgm_t_image *p1 = pgm_read("guadalest.pgm");
+        pgm_negative(p1);
+        pgm_write("guadalest-negative.pgm", p1);
+        pgm_threshold(p1, 200);
+        pgm_write("guadalest-negative-threshold.pgm", p1);
+        pgm_gradient(p1, 128, 175);
+        pgm_write("guadalest-gradient.pgm", p1);
+        pgm_free(p1);
+        pgm_show("guadalest-gradient.pgm");
+        pgm_show("guadalest-negative.pgm");
+        pgm_show("guadalest-negative-threshold.pgm");
+        pgm_show("guadalest.pgm");
+    }
+    float timeAfter = clock();
+    float duration = (timeAfter - timeBefore) / CLOCKS_PER_SEC;
 
-    pgm_negative(p1);
-    pgm_write("guadalest-negative.pgm", p1);
-    pgm_threshold(p1, 200);
-    pgm_write("guadalest-negative-threshold.pgm", p1);
-    pgm_gradient(p1, 128, 175);
-    pgm_write("guadalest-gradient.pgm", p1);
-    pgm_free(p1);
-    pgm_show("guadalest-gradient.pgm");
-    pgm_show("guadalest-negative.pgm");
-    pgm_show("guadalest-negative-threshold.pgm");
-    pgm_show("guadalest.pgm");
-
+    printf("Durée totale : %f\n", duration); 
     // vérification de fuite mémoire : valgrind --leak-check=full ./traitement-image
 
     return EXIT_SUCCESS;

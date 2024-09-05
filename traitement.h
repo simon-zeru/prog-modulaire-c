@@ -1,6 +1,5 @@
 #ifndef TRAITEMENT_H_
 #define TRAITEMENT_H_
-
 #define DEBUG 0
 
 #if DEBUG
