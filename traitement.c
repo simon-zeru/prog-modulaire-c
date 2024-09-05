@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "traitement.h"
 #define SEUIL1_PIXEL(valeur, seuil) (valeur < seuil ? 0 : 255)
 #define SEUIL2_PIXEL(valeur, seuil) (valeur = (valeur < seuil) ? 0 : 255)
 
 void pgm_show(char *filename) {
+    AFFICHER_FONCTION();
     size_t size = strlen(filename) + strlen("eog") + 2;
     char *ptr = (char*)malloc(size);
     snprintf(ptr, size, "eog %s", filename);
@@ -17,6 +19,7 @@ void pgm_show(char *filename) {
 }
 
 pgm_t_image *pgm_malloc(size_t width, size_t height) {
+    AFFICHER_FONCTION();
     size_t size = width * height;
     pgm_t_pixel *vPixel = (pgm_t_pixel *)malloc(size);
     if (vPixel == NULL) {
@@ -35,11 +38,13 @@ pgm_t_image *pgm_malloc(size_t width, size_t height) {
 }
 
 void pgm_free(pgm_t_image *image) {
+    AFFICHER_FONCTION();
     free(image->pixels);
     free(image);
 }
 
 void pgm_solid(pgm_t_image *image, pgm_t_pixel color) {
+    AFFICHER_FONCTION();
     for (int i = 0; i < (image->width * image->height); i++) {
         image->pixels[i] = color;
     }
@@ -47,6 +52,7 @@ void pgm_solid(pgm_t_image *image, pgm_t_pixel color) {
 
 
 void pgm_negative(pgm_t_image *image) {
+    AFFICHER_FONCTION();
     for (int i = 0; i < (image->width * image->height); i++) {
         image->pixels[i] = 255 - image->pixels[i];
     }
@@ -55,6 +61,7 @@ void pgm_negative(pgm_t_image *image) {
 
 
 void pgm_threshold(pgm_t_image *image, pgm_t_pixel threshold) {
+    AFFICHER_FONCTION();
     if (threshold < 0 || threshold > 255) {
         perror("threshold out of range");
     } else {
@@ -67,6 +74,7 @@ void pgm_threshold(pgm_t_image *image, pgm_t_pixel threshold) {
 
 
 void pgm_gradient(pgm_t_image *image, pgm_t_pixel from, pgm_t_pixel to) {
+    AFFICHER_FONCTION();
     if (from < 0 || from > 255 || to < 0 || to > 255) {
         perror("from or to out of range");
     } else {
